@@ -1,6 +1,6 @@
 import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
-from openpyxl.worksheet.datavalidation import Datavalidation
+from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.formatting.rule import CellIsRule
 
 # Bibliotecas novas para PDF e WhatsApp
