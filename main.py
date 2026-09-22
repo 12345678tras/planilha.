@@ -15,10 +15,27 @@ st.set_page_config(page_title="Sistema de Farmácia Completo", page_icon="💊",
 st.title("💊 Sistema de Gestão de Farmácia e Fecho de Caixa")
 st.write("Painel robusto para controlo de stock, vendas, pagamentos (PIX, Dinheiro, Cartão) e relatórios.")
 
-# --- BARRA LATERAL PARA ENTRADA DE DADOS ---
-st.sidebar.header("📥 Registo Manual")
+# --- BARRA LATERAL COM OPÇÃO MANUAL E LISTA ---
+st.sidebar.header("📥 Gestão de Produtos")
 
-nome_remedio = st.sidebar.text_input("Nome do Remédio / Produto", "Ex: Paracetamol 500mg")
+# Lista de remédios pré-cadastrados com opção manual
+lista_remedios = [
+    "Paracetamol 500mg",
+    "Ibuprofeno 600mg",
+    "Dipirona 500ml",
+    "Amoxicilina 500mg",
+    "Omeprazol 20mg",
+    "✍️ Inserir Nome Manualmente..."
+]
+
+escolha_remedio = st.sidebar.selectbox("Selecione o Remédio", lista_remedios)
+
+# Se o utilizador escolher a opção manual, abre a caixa de texto livre
+if escolha_remedio == "✍️ Inserir Nome Manualmente...":
+    nome_remedio = st.sidebar.text_input("Digite o Nome do Remédio", "Novo Remédio")
+else:
+    nome_remedio = escolha_remedio
+
 quantidade = st.sidebar.number_input("Quantidade", min_value=1, value=10)
 preco_unitario = st.sidebar.number_input("Preço Unitário (R$)", min_value=0.0, value=15.00)
 
@@ -51,7 +68,6 @@ def enviar_mensagem_whatsapp(telefone, texto):
         "phone": telefone,
         "message": texto
     }
-    # Simulação de envio bem-sucedido
     return f"[WhatsApp Enviado para {telefone}]: {texto}"
 
 # --- ABA / SECÇÃO PRINCIPAL DE VISUALIZAÇÃO ---
@@ -60,15 +76,15 @@ tab1, tab2, tab3 = st.tabs(["📊 Painel de Controlo", "📦 Stock e Vendas", "�
 with tab1:
     st.subheader("Resumo Geral do Sistema")
     col1, col2, col3 = st.columns(3)
-    col1.metric("Produto em Destaque", nome_remedio)
+    col1.metric("Produto Selecionado", nome_remedio)
     col2.metric("Quantidade Atual", quantidade)
     col3.metric("Método Principal", forma_pagamento)
 
 with tab2:
     st.subheader("Gestão de Inventário e Medicamentos")
-    st.write("Aqui visualiza os remédios já cadastrados e pode inserir novos manualmente na barra lateral.")
+    st.write("Aqui visualiza os remédios e pode escolher da lista ou usar a opção de digitar manualmente na barra lateral.")
     
-    # Criar a estrutura do Excel em background para garantir robustez
+    # Criar a estrutura do Excel em background
     wb = openpyxl.Workbook()
     ws_dash = wb.active
     ws_dash.title = "Painel de Controlo"
