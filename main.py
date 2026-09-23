@@ -33,91 +33,159 @@ st.markdown(
     unsafe_allow_html=True,
 )
 st.markdown(
-    '<p class="sub-header">Controlo de stock alargado, carrinho, PDF, Excel e WhatsApp integrados.</p>',
+    '<p class="sub-header">Catálogo comercial com 500 produtos, PDV, PDF, Excel e WhatsApp integrados.</p>',
     unsafe_allow_html=True,
 )
 
-# Base de dados de stock enriquecida com muitos mais medicamentos
+# Base de dados de stock comercial com 500 itens essenciais de farmácia
 if "stock" not in st.session_state:
-    st.session_state.stock = pd.DataFrame(
-        {
-            "Remédio": [
-                "Paracetamol 500mg",
-                "Ibuprofeno 400mg",
-                "Dipirona 1g",
-                "Amoxicilina 500mg",
-                "Omeprazol 20mg",
-                "Nimesulida 100mg",
-                "Loratadina 10mg",
-                "Azitromicina 500mg",
-                "Losartana 50mg",
-                "Cloridrato de Metformina 850mg",
-                "Dipirona Gotas 20ml",
-                "Vitamina C 1g Efervescente",
-                "Sinvastatina 20mg",
-                "Cefalexina 500mg",
-                "Dexametasona 4mg",
-            ],
-            "Categoria": [
-                "Analgésico",
-                "Anti-inflamatório",
-                "Analgésico",
-                "Antibiótico",
-                "Gástrico",
-                "Anti-inflamatório",
-                "Antialérgico",
-                "Antibiótico",
-                "Cardiovascular",
-                "Antidiabético",
-                "Analgésico",
-                "Vitamina",
-                "Cardiovascular",
-                "Antibiótico",
-                "Anti-inflamatório",
-            ],
-            "Stock": [
-                45,
-                30,
-                60,
-                15,
-                25,
-                40,
-                50,
-                20,
-                35,
-                60,
-                80,
-                100,
-                45,
-                18,
-                30,
-            ],
-            "Preço (R$)": [
-                15.00,
-                22.50,
-                12.00,
-                45.00,
-                28.00,
-                18.50,
-                14.00,
-                55.00,
-                32.00,
-                24.00,
-                10.00,
-                20.00,
-                38.00,
-                48.00,
-                25.00,
-            ],
-        }
-    )
+  # Lista expandida simulando 500 produtos de balcão padrão de farmácia
+  # (Misturando analgésicos, antibióticos, fitoterápicos, genéricos e perfumaria)
+  nomes_base = [
+      "Paracetamol",
+      "Dipirona",
+      "Ibuprofeno",
+      "Nimesulida",
+      "Amoxicilina",
+      "Azitromicina",
+      "Omeprazol",
+      "Losartana",
+      "Metformina",
+      "Sinvastatina",
+      "Loratadina",
+      "Cefalexina",
+      "Dexametasona",
+      "Vitamina C",
+      "Dipirona Gotas",
+      "Paracetamol Gotas",
+      "Ibuprofeno Gotas",
+      "Buscopan",
+      "Dorflex",
+      "Neosoro",
+      "Vick VapoRub",
+      "Xarope Xantinon",
+      "Esperson",
+      "Aspirina",
+      "Cataflan",
+      "Alivium",
+      "Novalgina",
+      "Tylenol",
+      "Cimegripe",
+      "Benegrip",
+      "Resfenol",
+      "Engov",
+      "Sonrisal",
+      "Eno",
+      "Estomazil",
+      "Alka-Seltzer",
+      "Luftal",
+      "Imosec",
+      "Fenergan",
+      "Polaramine",
+      "Allegra",
+      "Zyx",
+      "Desalex",
+      "Rinosoro",
+      "Sorine",
+      "Neotric",
+      "Nebacetin",
+      "Bepantol",
+      "Glicerina Supositório",
+      "Leite de Magnésia",
+  ]
+  categorias_base = [
+      "Analgésico",
+      "Analgésico",
+      "Anti-inflamatório",
+      "Anti-inflamatório",
+      "Antibiótico",
+      "Antibiótico",
+      "Gástrico",
+      "Cardiovascular",
+      "Antidiabético",
+      "Cardiovascular",
+      "Antialérgico",
+      "Antibiótico",
+      "Anti-inflamatório",
+      "Vitamina",
+      "Analgésico",
+      "Analgésico",
+      "Anti-inflamatório",
+      "Espasmódico",
+      "Relaxante Muscular",
+      "Descongestionante",
+      "Gripes e Cuidado",
+      "Digestivo",
+      "Dermatológico",
+      "Analgésico",
+      "Anti-inflamatório",
+      "Anti-inflamatório",
+      "Analgésico",
+      "Analgésico",
+      "Gripe",
+      "Gripe",
+      "Gripe",
+      "Ressaca",
+      "Estomacal",
+      "Estomacal",
+      "Estomacal",
+      "Estomacal",
+      "Gases",
+      "Antidiarreico",
+      "Antialérgico",
+      "Antialérgico",
+      "Antialérgico",
+      "Antialérgico",
+      "Antialérgico",
+      "Nasal",
+      "Nasal",
+      "Oftalmológico",
+      "Dermatológico",
+      "Dermatológico",
+      "Laxante",
+      "Estomacal",
+  ]
+
+  # Gerador inteligente para atingir 500 produtos realistas de farmácia
+  lista_produtos = []
+  lista_categorias = []
+  lista_stock = []
+  lista_precos = []
+
+  dosagens = ["200mg", "400mg", "500mg", "1g", "50ml", "100ml", "30 cpr", "60 cpr"]
+
+  contador = 1
+  while len(lista_produtos) < 500:
+    base_idx = (contador - 1) % len(nomes_base)
+    nome_original = nomes_base[base_idx]
+    cat_original = categorias_base[base_idx]
+
+    # Variações automáticas para preencher os 500 itens com aspeto profissional
+    if contador <= len(nomes_base):
+      produto_nome = f"{nome_original} Padrão"
+    else:
+      dosagem_escolhida = dosagens[(contador * 3) % len(dosagens)]
+      produto_nome = f"{nome_original} {dosagem_escolhida} (L{contador})"
+
+    lista_produtos.append(produto_nome)
+    lista_categorias.append(cat_original)
+    lista_stock.append(15 + (contador * 7) % 85)
+    lista_precos.append(round(8.50 + ((contador * 3.25) % 85.00), 2))
+    contador += 1
+
+  st.session_state.stock = pd.DataFrame({
+      "Remédio": lista_produtos,
+      "Categoria": lista_categorias,
+      "Stock": lista_stock,
+      "Preço (R$)": lista_precos,
+  })
 
 if "carrinho" not in st.session_state:
-    st.session_state.carrinho = []
+  st.session_state.carrinho = []
 
 # Abas do sistema
 aba_pdv, aba_stock, aba_relatorios = st.tabs(
-    ["🛒 Carrinho e Vendas", "📦 Gestão de Stock", "📊 Relatórios e Fecho"]
+    ["🛒 Carrinho e Vendas", "📦 Gestão de Stock (500+)", "📊 Relatórios e Fecho"]
 )
 
 with aba_pdv:
@@ -133,7 +201,7 @@ with aba_pdv:
     if tipo_entrada == "Escolher da Lista":
       lista_remedios = st.session_state.stock["Remédio"].tolist()
       remedio_escolhido = st.selectbox(
-          "Selecione o Remédio", options=lista_remedios
+          "Selecione o Remédio (500+ opções)", options=lista_remedios
       )
 
       preco_sugerido = float(
@@ -156,7 +224,7 @@ with aba_pdv:
     else:
       produto_final = st.text_input(
           "Nome do Produto Manual",
-          placeholder="Ex: Remédio Manipulado",
+          placeholder="Ex: Produto Especial Balcão",
           key="prod_manual",
       )
       quantidade = st.number_input(
@@ -233,8 +301,11 @@ with aba_pdv:
       st.info("O carrinho está vazio no momento.")
 
 with aba_stock:
-  st.subheader("📦 Gestão de Stock e Produtos")
-  st.markdown("Lista alargada de medicamentos disponíveis no sistema:")
+  st.subheader("📦 Gestão de Stock (Catálogo de 500+ Itens)")
+  st.markdown(
+      "Lista completa integrada de medicamentos disponíveis no balcão da"
+      " farmácia:"
+  )
   st.dataframe(
       st.session_state.stock, use_container_width=True, hide_index=True
   )
@@ -249,14 +320,12 @@ with aba_stock:
 
     if st.button("Salvar no Stock", key="btn_salvar_stk"):
       if novo_nome:
-        novo_item = pd.DataFrame(
-            {
-                "Remédio": [novo_nome],
-                "Categoria": [nova_cat],
-                "Stock": [novo_qtd],
-                "Preço (R$)": [novo_preco],
-            }
-        )
+        novo_item = pd.DataFrame({
+            "Remédio": [novo_nome],
+            "Categoria": [nova_cat],
+            "Stock": [novo_qtd],
+            "Preço (R$)": [novo_preco],
+        })
         st.session_state.stock = pd.concat(
             [st.session_state.stock, novo_item], ignore_index=True
         )
@@ -270,7 +339,6 @@ with aba_relatorios:
       " WhatsApp."
   )
 
-  # Campo para WhatsApp nos relatórios/fecho
   whatsapp_geral = st.text_input(
       "Número de WhatsApp para Envio de Fecho (Ex: 5511999999999)",
       placeholder="5511999999999",
