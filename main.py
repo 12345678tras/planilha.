@@ -33,11 +33,11 @@ st.markdown(
     unsafe_allow_html=True,
 )
 st.markdown(
-    '<p class="sub-header">Controlo de stock, carrinho de vendas, relatórios PDF e WhatsApp.</p>',
+    '<p class="sub-header">Controlo de stock alargado, carrinho, PDF, Excel e WhatsApp integrados.</p>',
     unsafe_allow_html=True,
 )
 
-# Base de dados de stock
+# Base de dados de stock enriquecida com muitos mais medicamentos
 if "stock" not in st.session_state:
     st.session_state.stock = pd.DataFrame(
         {
@@ -47,6 +47,16 @@ if "stock" not in st.session_state:
                 "Dipirona 1g",
                 "Amoxicilina 500mg",
                 "Omeprazol 20mg",
+                "Nimesulida 100mg",
+                "Loratadina 10mg",
+                "Azitromicina 500mg",
+                "Losartana 50mg",
+                "Cloridrato de Metformina 850mg",
+                "Dipirona Gotas 20ml",
+                "Vitamina C 1g Efervescente",
+                "Sinvastatina 20mg",
+                "Cefalexina 500mg",
+                "Dexametasona 4mg",
             ],
             "Categoria": [
                 "Analgésico",
@@ -54,13 +64,54 @@ if "stock" not in st.session_state:
                 "Analgésico",
                 "Antibiótico",
                 "Gástrico",
+                "Anti-inflamatório",
+                "Antialérgico",
+                "Antibiótico",
+                "Cardiovascular",
+                "Antidiabético",
+                "Analgésico",
+                "Vitamina",
+                "Cardiovascular",
+                "Antibiótico",
+                "Anti-inflamatório",
             ],
-            "Stock": [45, 30, 60, 15, 25],
-            "Preço (R$)": [15.00, 22.50, 12.00, 45.00, 28.00],
+            "Stock": [
+                45,
+                30,
+                60,
+                15,
+                25,
+                40,
+                50,
+                20,
+                35,
+                60,
+                80,
+                100,
+                45,
+                18,
+                30,
+            ],
+            "Preço (R$)": [
+                15.00,
+                22.50,
+                12.00,
+                45.00,
+                28.00,
+                18.50,
+                14.00,
+                55.00,
+                32.00,
+                24.00,
+                10.00,
+                20.00,
+                38.00,
+                48.00,
+                25.00,
+            ],
         }
     )
 
-# Inicialização segura do carrinho com estrutura limpa
 if "carrinho" not in st.session_state:
     st.session_state.carrinho = []
 
@@ -123,7 +174,7 @@ with aba_pdv:
         "Forma de Pagamento", ["PIX", "Cartão", "Dinheiro"]
     )
     whatsapp_cliente = st.text_input(
-        "WhatsApp (Ex: 5511999999999)", placeholder="5511999999999"
+        "WhatsApp do Cliente (Ex: 5511999999999)", placeholder="5511999999999"
     )
 
     if st.button("➕ Adicionar ao Carrinho", type="primary", use_container_width=True):
@@ -145,7 +196,6 @@ with aba_pdv:
     st.subheader("🛒 Carrinho de Vendas")
 
     if len(st.session_state.carrinho) > 0:
-      # Converte com colunas blindadas contra erros de chave
       df_carrinho = pd.DataFrame(st.session_state.carrinho)
 
       if "Subtotal" in df_carrinho.columns:
@@ -184,11 +234,12 @@ with aba_pdv:
 
 with aba_stock:
   st.subheader("📦 Gestão de Stock e Produtos")
+  st.markdown("Lista alargada de medicamentos disponíveis no sistema:")
   st.dataframe(
       st.session_state.stock, use_container_width=True, hide_index=True
   )
 
-  with st.expander("➕ Adicionar Novo Remédio"):
+  with st.expander("➕ Adicionar Novo Remédio ao Catálogo"):
     novo_nome = st.text_input("Nome do Remédio", key="novo_nome_stk")
     nova_cat = st.text_input("Categoria", key="nova_cat_stk")
     novo_qtd = st.number_input("Stock Inicial", value=10, key="novo_qtd_stk")
@@ -214,12 +265,31 @@ with aba_stock:
 
 with aba_relatorios:
   st.subheader("📊 Relatórios e Documentos")
-  st.markdown("Extraia relatórios detalhados das operações.")
+  st.markdown(
+      "Extraia relatórios detalhados e envie notificações diretamente por"
+      " WhatsApp."
+  )
 
-  col_r1, col_r2 = st.columns(2)
+  # Campo para WhatsApp nos relatórios/fecho
+  whatsapp_geral = st.text_input(
+      "Número de WhatsApp para Envio de Fecho (Ex: 5511999999999)",
+      placeholder="5511999999999",
+  )
+
+  col_r1, col_r2, col_r3 = st.columns(3)
   with col_r1:
     if st.button("📄 Gerar Relatório em PDF", use_container_width=True):
       st.success("Relatório PDF gerado com sucesso!")
   with col_r2:
-    if st.button("📥 Descarregar Dados em Excel (.xlsx)", use_container_width=True):
+    if st.button("📥 Descarregar Excel (.xlsx)", use_container_width=True):
       st.success("Ficheiro Excel descarregado com sucesso!")
+  with col_r3:
+    if st.button("💬 Enviar Fecho via WhatsApp", use_container_width=True):
+      if whatsapp_geral:
+        link_zap_geral = f"https://wa.me/{whatsapp_geral}?text=Relatorio%20de%20fecho%20de%20caixa%20da%20farmacia%20concluido%20com%20sucesso!"
+        st.markdown(
+            f"[Clique aqui para abrir o WhatsApp]({link_zap_geral})",
+            unsafe_allow_html=True,
+        )
+      else:
+        st.warning("Insira o número do WhatsApp acima.")
